@@ -156,6 +156,21 @@ def validate_lead(data):
     return errors
 
 
+ADMIN_KEY = os.getenv("ADMIN_KEY", "")
+
+
+@app.route("/admin/leads")
+def admin_leads():
+    """View all leads. Requires ?key=ADMIN_KEY query param."""
+    if not ADMIN_KEY or request.args.get("key") != ADMIN_KEY:
+        return jsonify({"error": "unauthorized"}), 401
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM landing_leads ORDER BY created_at DESC").fetchall()
+    conn.close()
+    leads = [dict(r) for r in rows]
+    return jsonify({"count": len(leads), "leads": leads})
+
+
 @app.route("/")
 def landing():
     return render_template_string(LANDING_HTML)

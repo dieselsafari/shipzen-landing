@@ -12,6 +12,7 @@ import os
 import re
 import smtplib
 import threading
+import requests as http_requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
@@ -51,6 +52,8 @@ init_db()
 
 
 NOTIFY_EMAILS = os.getenv("NOTIFY_EMAILS", "mdoan28@gmail.com,boringmanagement@gmail.com").split(",")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+RESEND_FROM = os.getenv("RESEND_FROM", "ShipZen <onboarding@resend.dev>")
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER", "")
@@ -58,15 +61,9 @@ SMTP_PASS = os.getenv("SMTP_PASS", "")
 SMTP_FROM = os.getenv("SMTP_FROM", "")
 
 
-def send_lead_notification(lead_data):
-    """Send email notification for new lead (runs in background thread)."""
-    if not SMTP_USER or not SMTP_PASS:
-        print("[WARN] SMTP not configured — skipping email notification")
-        return
-
-    sender = SMTP_FROM or SMTP_USER
+def _build_lead_email(lead_data):
+    """Build subject and body for a lead notification."""
     subject = f"🚀 New ShipZen Lead: {lead_data.get('email', 'Unknown')}"
-
     body = f"""New lead submitted on ShipZen.co!
 
 📧 Email: {lead_data.get('email', 'N/A')}
@@ -78,21 +75,67 @@ def send_lead_notification(lead_data):
 ---
 Reply to this lead within 24 hours as promised on the site.
 """
+    return subject, body
 
+
+def _send_via_resend(lead_data):
+    """Send lead notification via Resend API."""
+    subject, body = _build_lead_email(lead_data)
+    for recipient in NOTIFY_EMAILS:
+        recipient = recipient.strip()
+        if not recipient:
+            continue
+        try:
+            resp = http_requests.post(
+                "https://api.resend.com/emails",
+                headers={
+                    "Authorization": f"Bearer {RESEND_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "from": RESEND_FROM,
+                    "to": recipient,
+                    "subject": subject,
+                    "text": body,
+                },
+                timeout=10,
+            )
+            if resp.status_code in (200, 201):
+                print(f"[OK] Resend notification sent to {recipient}")
+            else:
+                print(f"[ERR] Resend failed for {recipient}: {resp.status_code} {resp.text}")
+        except Exception as e:
+            print(f"[ERR] Resend request failed for {recipient}: {e}")
+
+
+def _send_via_smtp(lead_data):
+    """Send lead notification via SMTP (Gmail)."""
+    subject, body = _build_lead_email(lead_data)
+    sender = SMTP_FROM or SMTP_USER
     msg = MIMEMultipart()
     msg["From"] = sender
     msg["To"] = ", ".join(NOTIFY_EMAILS)
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "plain"))
-
     try:
         with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_USER, SMTP_PASS)
             server.sendmail(sender, NOTIFY_EMAILS, msg.as_string())
-        print(f"[OK] Lead notification sent to {NOTIFY_EMAILS}")
+        print(f"[OK] SMTP notification sent to {NOTIFY_EMAILS}")
     except Exception as e:
-        print(f"[ERR] Failed to send lead notification: {e}")
+        print(f"[ERR] SMTP send failed: {e}")
+
+
+def send_lead_notification(lead_data):
+    """Send email notification for new lead (runs in background thread).
+    Prefers Resend API if configured, falls back to SMTP."""
+    if RESEND_API_KEY:
+        _send_via_resend(lead_data)
+    elif SMTP_USER and SMTP_PASS:
+        _send_via_smtp(lead_data)
+    else:
+        print("[WARN] No email provider configured (set RESEND_API_KEY or SMTP_USER/SMTP_PASS)")
 
 
 def notify_lead_async(lead_data):

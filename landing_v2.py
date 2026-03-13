@@ -10,6 +10,10 @@ Run with: python3 landing_v2.py
 import sqlite3
 import os
 import re
+import smtplib
+import threading
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from pathlib import Path
 
@@ -44,6 +48,57 @@ def init_db():
 
 
 init_db()
+
+
+NOTIFY_EMAILS = os.getenv("NOTIFY_EMAILS", "mdoan28@gmail.com,boringmanagement@gmail.com").split(",")
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASS = os.getenv("SMTP_PASS", "")
+SMTP_FROM = os.getenv("SMTP_FROM", "")
+
+
+def send_lead_notification(lead_data):
+    """Send email notification for new lead (runs in background thread)."""
+    if not SMTP_USER or not SMTP_PASS:
+        print("[WARN] SMTP not configured — skipping email notification")
+        return
+
+    sender = SMTP_FROM or SMTP_USER
+    subject = f"🚀 New ShipZen Lead: {lead_data.get('email', 'Unknown')}"
+
+    body = f"""New lead submitted on ShipZen.co!
+
+📧 Email: {lead_data.get('email', 'N/A')}
+📱 Phone: {lead_data.get('phone', 'N/A') or 'Not provided'}
+🌐 Website: {lead_data.get('website', 'N/A') or 'Not provided'}
+📦 Monthly Shipments: {lead_data.get('monthly_shipments', 'N/A') or 'Not provided'}
+🕐 Submitted: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}
+
+---
+Reply to this lead within 24 hours as promised on the site.
+"""
+
+    msg = MIMEMultipart()
+    msg["From"] = sender
+    msg["To"] = ", ".join(NOTIFY_EMAILS)
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASS)
+            server.sendmail(sender, NOTIFY_EMAILS, msg.as_string())
+        print(f"[OK] Lead notification sent to {NOTIFY_EMAILS}")
+    except Exception as e:
+        print(f"[ERR] Failed to send lead notification: {e}")
+
+
+def notify_lead_async(lead_data):
+    """Fire-and-forget email notification so it doesn't slow down the response."""
+    t = threading.Thread(target=send_lead_notification, args=(lead_data,), daemon=True)
+    t.start()
 
 
 def validate_lead(data):
@@ -81,6 +136,15 @@ def submit_lead():
     )
     conn.commit()
     conn.close()
+
+    # Send email notification (async — doesn't block response)
+    notify_lead_async({
+        "email": data["email"].strip(),
+        "phone": data.get("phone", "").strip(),
+        "website": data.get("website", "").strip(),
+        "monthly_shipments": data.get("monthly_shipments", "").strip(),
+    })
+
     return jsonify({"ok": True, "message": "Thanks! We'll send your savings quote within 24 hours."})
 
 

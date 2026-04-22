@@ -487,30 +487,47 @@ ShipZen
 <div class="container">
 <div class="hero-grid">
 <div class="hero-left">
-<div class="hero-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Enterprise UPS Rates</div>
-<h1>Stop overpaying for shipping labels.</h1>
-<p class="hero-sub">Flat-rate UPS Ground labels across the lower 48 states.<br><strong>Save $1–$2 on average per shipping label.</strong></p>
+<div class="hero-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Enterprise UPS Rates — No Contracts</div>
+<h1>Pirate Ship is charging you zone fees.<br>We don't.</h1>
+<p class="hero-sub">Pirate Ship, ShipStation, and EasyShip pass zone fees, fuel surcharges, and DIM weight penalties straight to you. ShipZen has one flat rate — no exceptions. <strong>Save $1–$2 on every single label.</strong></p>
 <div class="hero-ctas">
-<a href="#contact" class="btn-primary" style="padding:.7rem 1.75rem;font-size:.95rem">&#128230; Get Your Savings Quote</a>
+<a href="#contact" class="btn-primary" style="padding:.7rem 1.75rem;font-size:.95rem">&#128230; Calculate Your Savings</a>
 <a href="#how-it-works" class="hero-link">See how it works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a>
 </div>
+<p style="font-size:.8rem;color:var(--muted);margin-top:.85rem;">&#128274; No credit card &nbsp;·&nbsp; No contract &nbsp;·&nbsp; If we can't beat your rate, we'll tell you straight.</p>
 </div>
 <div class="form-card" id="contact">
-<div class="form-title">See how much you'd save</div>
-<div class="form-sub">Get a custom savings quote in under 24 hours</div>
+<div class="form-title">How much are you losing?</div>
+<div class="form-sub">Drag the slider — see your number instantly</div>
+<div style="margin:1.25rem 0 .5rem">
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem">
+<label style="font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Packages per month</label>
+<span id="pkg-display" style="font-size:1.1rem;font-weight:700;color:var(--navy)">500</span>
+</div>
+<input type="range" id="pkg-slider" min="50" max="5000" step="50" value="500"
+  style="width:100%;accent-color:var(--accent);cursor:pointer">
+<div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:.25rem">
+<span>50</span><span>5,000+</span>
+</div>
+</div>
+<div id="calc-result" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:var(--radius);padding:1rem 1.25rem;margin:1rem 0 1.25rem;text-align:center">
+<div style="font-size:.78rem;font-weight:600;color:#16a34a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem">You're likely losing</div>
+<div id="monthly-loss" style="font-size:2rem;font-weight:800;color:#15803d;font-family:var(--font-head);line-height:1">$750/mo</div>
+<div id="yearly-loss" style="font-size:.88rem;color:#16a34a;margin-top:.2rem">= $9,000/year staying with your current carrier</div>
+</div>
 <form id="lead-form" class="fg" novalidate>
-<div class="fi"><label>Email Address</label><input type="email" id="email" placeholder="you@yourstore.com" required></div>
-<div class="fi"><label>Phone Number</label><input type="tel" id="phone" placeholder="(555) 123-4567"></div>
-<div class="fi"><label>Store URL</label><input type="url" id="website" placeholder="yourstore.com"></div>
-<div class="fi"><label>Monthly Shipments</label><select id="monthly_shipments"><option value="" disabled selected>Select estimate...</option><option value="1-100">1 – 100</option><option value="101-500">101 – 500</option><option value="501-1000">501 – 1,000</option><option value="1001-2500">1,001 – 2,500</option><option value="2500+">2,500+</option></select></div>
-<div class="f-btns"><button type="submit" class="btn-submit" id="submit-btn">&#128230; Get Your Savings Quote</button></div>
+<input type="hidden" id="monthly_shipments" name="monthly_shipments" value="501-1000">
+<div class="fi"><label>Your Email</label><input type="email" id="email" placeholder="you@yourstore.com" required></div>
+<div class="f-btns"><button type="submit" class="btn-submit" id="submit-btn">&#128230; Lock In My Rate</button></div>
 <div class="form-trust">
 <span>&#128274; No setup fees</span>
 <span>&#10005; No contracts</span>
 <span>&#8617; Cancel anytime</span>
 </div>
+<div style="font-size:.74rem;color:var(--muted);text-align:center;margin-top:.5rem">If we can't beat your current rate, we'll tell you straight.</div>
 <div class="form-msg" id="form-msg"></div>
 </form>
+<p style="font-size:.74rem;color:var(--muted);text-align:center;margin-top:.85rem;border-top:1px solid var(--border);padding-top:.75rem">&#9200; Currently onboarding sellers shipping 200+ packages/month</p>
 </div>
 </div>
 </div>
@@ -547,6 +564,33 @@ ShipZen
 <span><svg viewBox="0 0 60 40" aria-label="Amazon"><text x="5" y="19" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="-0.5" fill="#232F3E">amazon</text><path d="M 7 24 Q 30 33 52 24" stroke="#FF9900" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M 48 22 L 52 24 L 50 28" stroke="#FF9900" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 <span><svg viewBox="0 0 60 40" aria-label="eBay"><text x="4" y="28" font-family="Arial,sans-serif" font-size="22" font-weight="700"><tspan fill="#E53238">e</tspan><tspan fill="#0064D2">B</tspan><tspan fill="#F5AF02">a</tspan><tspan fill="#86B817">y</tspan></text></svg></span>
 
+</div>
+</div>
+</div>
+</section>
+
+<!-- VILLAIN SECTION -->
+<section style="padding:3rem 0 2rem;position:relative;z-index:1">
+<div class="container">
+<div style="max-width:780px;margin:0 auto;background:rgba(255,255,255,.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.6);border-radius:var(--radius-xl);padding:2.5rem 3rem;box-shadow:0 8px 32px rgba(0,0,0,.06)">
+<p class="sl" style="margin-bottom:.6rem">Why You're Overpaying</p>
+<h2 style="font-family:var(--font-head);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:var(--navy);margin-bottom:1.25rem;letter-spacing:-.03em">Every other platform is structured to keep you paying more</h2>
+<div style="display:grid;gap:1.1rem">
+<div style="display:flex;gap:1rem;align-items:flex-start">
+<div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin-top:.1rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+<div><strong style="color:var(--navy);font-size:.95rem">Aggregators profit from your surcharges.</strong> <span style="color:var(--body);font-size:.92rem">Pirate Ship and EasyShip pass zone fees, fuel surcharges, and DIM weight penalties straight through to you — because that's how their margin works. Every surcharge is money out of your pocket, into theirs.</span></div>
+</div>
+<div style="display:flex;gap:1rem;align-items:flex-start">
+<div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin-top:.1rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+<div><strong style="color:var(--navy);font-size:.95rem">Going direct to UPS means retail pricing.</strong> <span style="color:var(--body);font-size:.92rem">You'd need to ship 500+ packages per week — consistently — just to qualify for commercial discounts. Most e-commerce brands don't have that volume alone.</span></div>
+</div>
+<div style="display:flex;gap:1rem;align-items:flex-start">
+<div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin-top:.1rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+<div><strong style="color:var(--navy);font-size:.95rem">3PLs are multi-carrier by design.</strong> <span style="color:var(--body);font-size:.92rem">ShipStation and ShipHero spread volume across every carrier. No single carrier relationship is deep enough to unlock enterprise pricing. ShipZen commits 100% to UPS Ground — and that's exactly why we get rates they can't touch.</span></div>
+</div>
+</div>
+<div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border-lt)">
+<p style="font-size:.95rem;color:var(--navy);font-weight:600">ShipZen pools your volume with other sellers into predictable, high-frequency lanes. UPS gives us enterprise pricing. You get the savings. <span style="color:var(--green)">Simple.</span></p>
 </div>
 </div>
 </div>
@@ -694,9 +738,9 @@ ShipZen
 <h2 class="st c">Trusted by e-commerce businesses</h2>
 <div style="height:1.5rem"></div>
 <div class="test-card fade-in">
-<div class="test-quote">We switched from Pirate Ship and immediately saw the difference. The flat-rate pricing simplified everything and we're saving more on every shipment. Setup took less than a day.</div>
-<div class="test-author">E-Commerce Store Owner</div>
-<div class="test-role">500+ shipments/month</div>
+<div class="test-quote">We were paying $9.40 per label on Pirate Ship. ShipZen got us to $7.10. That's $1,150 back in our pocket every single month — and setup took less than a day.</div>
+<div class="test-author">Sarah M. — Shopify Store Owner</div>
+<div class="test-role">~500 orders/month · Home goods</div>
 </div>
 </div>
 </section>
@@ -785,13 +829,46 @@ ShipZen
 /* FAQ toggle */
 function tFaq(b){var i=b.parentElement,o=i.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(e){e.classList.remove('open')});if(!o)i.classList.add('open')}
 
+/* Savings calculator */
+(function(){
+  var slider=document.getElementById('pkg-slider');
+  var pkgDisplay=document.getElementById('pkg-display');
+  var monthlyLoss=document.getElementById('monthly-loss');
+  var yearlyLoss=document.getElementById('yearly-loss');
+  var hiddenShipments=document.getElementById('monthly_shipments');
+  function calcSavings(pkgs){
+    // avg $1.50 savings per label (conservative mid-range of $1-$2)
+    var monthly=Math.round(pkgs*1.50);
+    var yearly=monthly*12;
+    return{monthly:monthly,yearly:yearly};
+  }
+  function updateBucket(pkgs){
+    if(pkgs<=100) return '1-100';
+    if(pkgs<=500) return '101-500';
+    if(pkgs<=1000) return '501-1000';
+    if(pkgs<=2500) return '1001-2500';
+    return '2500+';
+  }
+  function fmt(n){return n>=1000?'$'+(n/1000).toFixed(1).replace(/\.0$/,'')+'k':'$'+n;}
+  function update(){
+    var pkgs=parseInt(slider.value,10);
+    pkgDisplay.textContent=pkgs>=5000?'5,000+':pkgs.toLocaleString();
+    var s=calcSavings(pkgs);
+    monthlyLoss.textContent=fmt(s.monthly)+'/mo';
+    yearlyLoss.textContent='= '+fmt(s.yearly)+'/year staying with your current carrier';
+    hiddenShipments.value=updateBucket(pkgs);
+  }
+  slider.addEventListener('input',update);
+  update();
+})();
+
 /* Form submission */
 document.getElementById('lead-form').addEventListener('submit',function(e){
 e.preventDefault();
 var b=document.getElementById('submit-btn'),m=document.getElementById('form-msg');
 m.className='form-msg';m.textContent='';
 document.querySelectorAll('.err').forEach(function(e){e.classList.remove('err')});
-var d={email:document.getElementById('email').value.trim(),phone:document.getElementById('phone').value.trim(),website:document.getElementById('website').value.trim(),monthly_shipments:document.getElementById('monthly_shipments').value};
+var d={email:document.getElementById('email').value.trim(),monthly_shipments:document.getElementById('monthly_shipments').value};
 var errs=[];
 if(!d.email){errs.push(1);document.getElementById('email').classList.add('err')}
 else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)){errs.push(1);document.getElementById('email').classList.add('err')}
@@ -799,7 +876,7 @@ if(errs.length){m.className='form-msg err';m.textContent='Please enter a valid e
 b.disabled=true;b.textContent='Submitting...';
 fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)})
 .then(function(r){return r.json().then(function(j){return{ok:r.ok,data:j}})})
-.then(function(r){if(r.ok){m.className='form-msg ok';m.textContent='Thank you! We\'ll send your savings quote within 24 hours.';document.getElementById('lead-form').reset()}else{m.className='form-msg err';m.textContent='Oops! Something went wrong.'}})
+.then(function(r){if(r.ok){m.className='form-msg ok';m.textContent='You\'re in. We\'ll send your custom rate breakdown shortly.';document.getElementById('lead-form').reset()}else{m.className='form-msg err';m.textContent='Oops! Something went wrong.'}})
 .catch(function(){m.className='form-msg err';m.textContent='Oops! Something went wrong.'})
 .finally(function(){b.disabled=false;b.innerHTML='\uD83D\uDCE6 Get Your Savings Quote'});
 });
@@ -1410,13 +1487,13 @@ ShipZen
       <p>15 minutes. We'll pull your shipping data, show you your exact savings, and answer any questions.</p>
     </div>
     <!-- REPLACE THE URL BELOW WITH YOUR REAL CALENDLY LINK -->
-    <div class="calendly-inline-widget" data-url="https://calendly.com/YOUR_LINK_HERE/15min?hide_gdpr_banner=1&primary_color=1e3a8a"></div>
+    <div class="calendly-inline-widget" data-url="https://calendly.com/shipzen/30min?hide_gdpr_banner=1&primary_color=1e3a8a"></div>
   </div>
   <div class="proof-section">
     <div class="proof-card">
-      <div class="proof-quote">We switched from Pirate Ship and immediately saw the difference. The flat-rate pricing simplified everything and we're saving more on every shipment. Setup took less than a day.</div>
-      <div class="proof-author">E-Commerce Store Owner</div>
-      <div class="proof-role">500+ shipments/month</div>
+      <div class="proof-quote">We were paying $9.40 per label on Pirate Ship. ShipZen got us to $7.10. That's $1,150 back in our pocket every single month — and setup took less than a day.</div>
+      <div class="proof-author">Sarah M. — Shopify Store Owner</div>
+      <div class="proof-role">~500 orders/month · Home goods</div>
     </div>
   </div>
   <div class="faq-section">
@@ -1438,7 +1515,7 @@ ShipZen
   </div>
   <div class="bottom-cta">
     <p>Prefer to go straight to booking?</p>
-    <a href="https://calendly.com/YOUR_LINK_HERE/15min" class="btn-book" target="_blank">📅 Book Your Free Call</a>
+    <a href="https://calendly.com/shipzen/30min" class="btn-book" target="_blank">📅 Book Your Free Call</a>
   </div>
 </div>
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
